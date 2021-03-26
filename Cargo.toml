@@ -1,0 +1,11 @@
+[package]
+name = "Volt"
+version = "0.1.0"
+authors = ["XtremeDevX <xtremedevx@gmail.com>"]
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+git2 = "0.13"
+json = "0.12.4"
