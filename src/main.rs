@@ -6,16 +6,18 @@ mod model;
 
 // Imports
 // use std::{ fs::{File}, io::Read };
-use std::time::{ Instant, Duration };
+use std::time::Instant;
 use model::http_manager;
 
 fn main() {
     // Generate a url to download the library from (https://registry.npmjs.org/ + name)
     let init = Instant::now();
     let response = http_manager::send_package_request("@nastyox/rando.js");
-    println!("{:?}", response);
+    // println!("{:?}", response);
     let end = Instant::now();
     println!("\nExecution Completed With Exit Code 0 in {:.2}", (end - init).as_secs_f32());
+    // Access ["dist"]["current-version"]["tarball"]
+    // http_manager::download()
 }
 
 

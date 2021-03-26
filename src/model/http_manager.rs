@@ -1,11 +1,13 @@
+use reqwest::{ blocking::get };
 use json::{ parse, JsonValue };
+use std::fs::File;
+use std::io;
 use std::process;
-use reqwest;
 
 pub fn send_package_request(name: &str) -> JsonValue {
     let mut data = String::new();
 
-    match reqwest::blocking::get(format!("https://registry.npmjs.org/{}", name)) {
+    match get(format!("https://registry.npmjs.org/{}", name)) {
         Ok(response) => {
             // Check if 200 OK
             if response.status() == reqwest::StatusCode::OK {
@@ -22,6 +24,8 @@ pub fn send_package_request(name: &str) -> JsonValue {
         Err(err) => println!("Failed To Send Request: {}", err)
     }
 
+    println!("{}\n\n", data);
+
     // Parse JSON And Convert to JsonValue
     let res = parse(&data).unwrap_or_else(| error | {
         // Display Error Message And Exit
@@ -31,4 +35,10 @@ pub fn send_package_request(name: &str) -> JsonValue {
 
     // Return JsonValue Response
     res
+}
+
+pub fn download(url: &str, file_type: &str) {
+        let mut resp = get(url).expect("Failed To Download");
+        let mut out = File::create("rustup-init.sh").expect("Failed To Create File");
+        io::copy(&mut resp, &mut out).expect("Failed To Copy Content");
 }
