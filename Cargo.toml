@@ -10,5 +10,3 @@ edition = "2018"
 json = "0.12.4"
 reqwest = { version = "*", features = ["blocking"] }
 indicatif = "0.9.0"
-failure = "0.1.2"
-exitfailure = "0.5.1"

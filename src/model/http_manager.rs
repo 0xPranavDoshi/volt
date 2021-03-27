@@ -24,7 +24,7 @@ pub fn send_package_request(name: &str) -> JsonValue {
         Err(err) => println!("Failed To Send Request: {}", err)
     }
 
-    println!("{}\n\n", data);
+    // println!("{}\n\n", data);
 
     // Parse JSON And Convert to JsonValue
     let res = parse(&data).unwrap_or_else(| error | {
@@ -37,8 +37,8 @@ pub fn send_package_request(name: &str) -> JsonValue {
     res
 }
 
-pub fn download(url: &str, file_type: &str) {
+pub fn download(url: &str, file_name: &str) {
         let mut resp = get(url).expect("Failed To Download");
-        let mut out = File::create("rustup-init.sh").expect("Failed To Create File");
+        let mut out = File::create(concat!("node_modules\\{}", file_name)).expect("Failed To Create File");
         io::copy(&mut resp, &mut out).expect("Failed To Copy Content");
 }
