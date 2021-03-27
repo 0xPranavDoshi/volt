@@ -14,12 +14,21 @@ fn main() {
     // Generate a url to download the library from (https://registry.npmjs.org/ + name)
     let init = Instant::now();
     let response = http_manager::send_package_request("@nastyox/rando.js");
-    // println!("{:?}", response);
+    println!("{}", response);
+    // TODO: Replace ["2.0.0"] With "version"
+    // TODO: Put this in Package Class
+    let mut package_name = response["name"].to_string();
+    if package_name.contains('/') {
+        let arr = package_name.split("/");
+        package_name = arr.last().unwrap().to_string();
+    }
+
+    println!("{}", package_name);
+    
+    let url: &JsonValue = &response["versions"]["2.0.0"]["dist"]["tarball"];
+    http_manager::download(url.to_string().as_str(), format!("{}.tgz", package_name).as_str());
     let end = Instant::now();
     println!("\nExecution Completed With Exit Code 0 in {:.2}", (end - init).as_secs_f32());
-    // Access ["dist"]["current-version"]["tarball"]
-    let url: &JsonValue = &response["versions"]["2.0.0"]["dist"]["tarball"];
-    http_manager::download(url, ".tgz")
 }
 
 

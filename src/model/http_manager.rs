@@ -1,4 +1,4 @@
-use reqwest::{ blocking::get };
+use reqwest::blocking::get;
 use json::{ parse, JsonValue };
 use std::fs::File;
 use std::io;
@@ -24,8 +24,6 @@ pub fn send_package_request(name: &str) -> JsonValue {
         Err(err) => println!("Failed To Send Request: {}", err)
     }
 
-    // println!("{}\n\n", data);
-
     // Parse JSON And Convert to JsonValue
     let res = parse(&data).unwrap_or_else(| error | {
         // Display Error Message And Exit
@@ -39,6 +37,8 @@ pub fn send_package_request(name: &str) -> JsonValue {
 
 pub fn download(url: &str, file_name: &str) {
         let mut resp = get(url).expect("Failed To Download");
-        let mut out = File::create(concat!("node_modules\\{}", file_name)).expect("Failed To Create File");
+        let path = format!(r"C:\Users\xtrem\Desktop\volt\node_modules\\{}", file_name);
+        println!("{}", path);
+        let mut out = File::create(&path).expect("Failed To Create File");
         io::copy(&mut resp, &mut out).expect("Failed To Copy Content");
 }
