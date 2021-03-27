@@ -25,7 +25,7 @@ pub fn send_package_request(name: &str) -> JsonValue {
     }
 
     // Parse JSON And Convert to JsonValue
-    let res = parse(&data).unwrap_or_else(| error | {
+    let res = parse(&data).unwrap_or_else(|error| {
         // Display Error Message And Exit
         eprintln!("An Error Occured While Parsing The Json Data : {}", error);
         process::exit(1);
@@ -37,7 +37,7 @@ pub fn send_package_request(name: &str) -> JsonValue {
 
 pub fn download(url: &str, file_name: &str) {
         let mut resp = get(url).expect("Failed To Download");
-        let path = format!(r"C:\Users\xtrem\Desktop\volt\node_modules\\{}", file_name);
+        let path = format!(r"D:\prana\Programming\My Projects\volt\node_modules\\{}", file_name);
         let mut out = File::create(&path).expect("Failed To Create File");
         io::copy(&mut resp, &mut out).expect("Failed To Copy Content");
 }

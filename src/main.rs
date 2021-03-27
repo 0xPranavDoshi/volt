@@ -17,6 +17,9 @@ fn main() {
     // Start Timer
     let init = Instant::now();
 
+    // Make sure all prerequisites exist
+    fs_manager::init();
+
     // Send A Web Request To Package Name
     let response = http_manager::send_package_request("@nastyox/rando.js");
     
@@ -24,15 +27,22 @@ fn main() {
     // TODO: Put this in Package Class
     
     let mut package_name = response["name"].to_string();
+    let mut developer: &str = "";
+   
+    let latest_version: &JsonValue = &response["dist-tags"]["latest"];
+
     if package_name.contains('/') {
         let arr = package_name.split("/");
         package_name = arr.last().unwrap().to_string();
+        developer = arr.next().unwrap();
+        println!("FIRST ELEMETNWESRF +>>SD {}", developer);
     }
 
-    let url: &JsonValue = &response["versions"]["2.0.0"]["dist"]["tarball"];
+
+    let url: &JsonValue = &response["versions"][latest_version.as_str().unwrap()]["dist"]["tarball"];
     http_manager::download(url.to_string().as_str(), format!("{}.tar.gz", package_name).as_str());
     
-    match fs_manager::decompress(&package_name, format!(r"node_modules\{}.tar.gz", package_name).as_str()) {
+    match fs_manager::decompress(&developer, &package_name, format!(r"node_modules\{}.tar.gz", package_name).as_str()) {
         Ok(_) => {},
         Err(e) => eprintln!("Failed To Decompress Tarball: {}", e),
     }
