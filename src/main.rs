@@ -1,34 +1,50 @@
 // Crates
 
+
 // Modules
 mod model;
 
-
 // Imports
 // use std::{ fs::{File}, io::Read };
-use std::time::Instant;
-use json::JsonValue;
+use std::fs::remove_file;
 use model::http_manager;
+use std::time::Instant;
+use model::fs_manager;
+use json::JsonValue;
+
 
 fn main() {
-    // Generate a url to download the library from (https://registry.npmjs.org/ + name)
+    // Start Timer
     let init = Instant::now();
+
+    // Send A Web Request To Package Name
     let response = http_manager::send_package_request("@nastyox/rando.js");
-    println!("{}", response);
+    
     // TODO: Replace ["2.0.0"] With "version"
     // TODO: Put this in Package Class
+    
     let mut package_name = response["name"].to_string();
     if package_name.contains('/') {
         let arr = package_name.split("/");
         package_name = arr.last().unwrap().to_string();
     }
 
-    println!("{}", package_name);
-    
     let url: &JsonValue = &response["versions"]["2.0.0"]["dist"]["tarball"];
-    http_manager::download(url.to_string().as_str(), format!("{}.tgz", package_name).as_str());
+    http_manager::download(url.to_string().as_str(), format!("{}.tar.gz", package_name).as_str());
+    
+    match fs_manager::decompress(&package_name, format!(r"node_modules\{}.tar.gz", package_name).as_str()) {
+        Ok(_) => {},
+        Err(e) => eprintln!("Failed To Decompress Tarball: {}", e),
+    }
+
+    match remove_file(format!(r"node_modules\{}.tar.gz", package_name).as_str()) {
+        Ok(_) => println!(""),
+        Err(e) => eprintln!("Failed To Delete Tarball: {}", e), 
+    }
+
+    // End Timer
     let end = Instant::now();
-    println!("\nExecution Completed With Exit Code 0 in {:.2}", (end - init).as_secs_f32());
+    println!("\nExecution Completed With Exit Code 0 in {:.2}s", (end - init).as_secs_f32());
 }
 
 

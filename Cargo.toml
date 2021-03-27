@@ -10,3 +10,5 @@ edition = "2018"
 json = "0.12.4"
 reqwest = { version = "*", features = ["blocking"] }
 indicatif = "0.9.0"
+flate2 = "1.0.20"
+tar = "0.4.33"

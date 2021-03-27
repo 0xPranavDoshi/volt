@@ -38,7 +38,6 @@ pub fn send_package_request(name: &str) -> JsonValue {
 pub fn download(url: &str, file_name: &str) {
         let mut resp = get(url).expect("Failed To Download");
         let path = format!(r"C:\Users\xtrem\Desktop\volt\node_modules\\{}", file_name);
-        println!("{}", path);
         let mut out = File::create(&path).expect("Failed To Create File");
         io::copy(&mut resp, &mut out).expect("Failed To Copy Content");
 }
