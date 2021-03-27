@@ -21,7 +21,7 @@ pub fn send_package_request(name: &str) -> JsonValue {
                 println!("Response Was Not 200 OK");
             }
         }
-        Err(err) => println!("Failed To Send Request: {}", err)
+        Err(err) => eprintln!("Failed To Send Request: {}", err)
     }
 
     // Parse JSON And Convert to JsonValue
